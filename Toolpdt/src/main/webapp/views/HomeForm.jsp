@@ -34,13 +34,15 @@
                 </div>
             </div>
             <div class="col-10 container_right">
+            <form method="post" action="Home">
                 <div class="container_right-header">
                     <div class="container_right-header-TT">
                         <a href="/Toolpdt/Home"><img class="header_right-icon_user" src="./views/assets/image/user.png" alt=""></a>
                         <h4 class="header_right-name_user">Nguyễn Lê Hải</h4>
-                        <button class="header_right-btn_user">Đăng xuất</button>
+                        <button formaction="/Toolpdt/Home/logout" class="header_right-btn_user">Đăng xuất</button>
                     </div>
                 </div>
+                </form>
                 <div class="container container_right-body">
                     <div class="container_right-body-intro">
                         <h2>Danh sách các kỳ</h2>

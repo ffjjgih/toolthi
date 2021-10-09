@@ -14,14 +14,15 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
+import javax.servlet.http.HttpSession;
 
 import Dao.Daokithi;
 import Model.KiHoc;
 
 @WebServlet({
 	"/Home",
-	"/Home/insert"		
+	"/Home/insert",
+	"/Home/logout"
 })
 public class Home extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -58,6 +59,11 @@ public class Home extends HttpServlet {
 			insert(request, response);
 			KiHoc k1=this.kithi.getkihoc().get(0);
 			response.sendRedirect("http://localhost:8080/Toolpdt/Uploadkht?id="+k1.getIdhk());
+		}else if(url.contains("logout")) {
+			HttpSession session = request.getSession();
+
+			session.setAttribute("user", null);
+			response.sendRedirect("http://localhost:8080/Toolpdt/login-google");
 		}
 		
 		

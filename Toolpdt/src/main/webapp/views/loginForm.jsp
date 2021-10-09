@@ -26,7 +26,7 @@
 			<div class="grid wide">
 				<div class="row sm-gutter">
 					<div class="col l-6">
-						<form method="post" action="/Toolpdt/login-google">
+						<form method="post" action="/Toolpdt/login-google" enctype="multipart/form-data">
 							<div class="formlogin">
 								<div class="titleForm">
 									<h1 class="fonttext">LOGIN FORM</h1>
@@ -43,9 +43,9 @@
 									<button class="button" type="submit">SUBMIT</button>
 								</div>
 								<a
-									href="https://accounts.google.com/o/oauth2/auth?scope=email&redirect_uri=http://localhost:8080/Toolpdt/Home&response_type=code
-    							&client_id=46349360502-oksdnai40vgkko6iecnrf851jal0e0ca.apps.googleusercontent.com&approval_prompt=force"
-									class="google button" id="login"> <img class="img_google"
+									href="https://accounts.google.com/o/oauth2/auth?scope=email&redirect_uri=http://localhost:8080/Toolpdt/login-google&response_type=code
+    &client_id=46349360502-oksdnai40vgkko6iecnrf851jal0e0ca.apps.googleusercontent.com&approval_prompt=force"
+									class="google button"> <img class="img_google"
 									src="./views/assets/image/google.png" alt="">
 								</a>
 							</div>

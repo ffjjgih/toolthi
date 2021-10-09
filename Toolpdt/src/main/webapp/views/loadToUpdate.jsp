@@ -25,7 +25,7 @@
             <div class="grid wide">
                 <a href="HomeForm.html"><img class="header_img" src="./views/assets/image/Poly.png" alt="HomeForm.html"></a>
                 <img class="header_icon_user" src="./views/assets/image/user.png" alt="">
-                <button class="header_right-btn_user">Đăng xuất</button>
+                <a href="" class="header_right-btn_user">Đăng xuất</a>
             </div>
         </header>
 
