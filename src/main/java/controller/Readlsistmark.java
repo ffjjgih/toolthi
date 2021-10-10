@@ -1,11 +1,10 @@
 package controller;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +14,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 
 import Dao.Daokht;
@@ -27,7 +27,7 @@ import Services.Readfilediemdanh;
 import Services.Readfileonline;
 import Services.Uploaddsthi;
 
-@MultipartConfig()
+@MultipartConfig
 @WebServlet("/Readlsistmark")
 public class Readlsistmark extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -43,7 +43,7 @@ public class Readlsistmark extends HttpServlet {
 	private KiHoc k;
 	int index;
 	FileInputStream fileInputStream = null;
-    OutputStream responseOutputStream = null;
+	OutputStream responseOutputStream = null;
 
 	public Readlsistmark() {
 		this.diemdanh = new Readfilediemdanh();
@@ -51,18 +51,18 @@ public class Readlsistmark extends HttpServlet {
 		this.lstsvcamthi = new ArrayList<SinhVien>();
 		this.lstsvthi = new ArrayList<SinhVien>();
 		this.quiz = new ReadFileQuiz();
-		this.daokht=new Daokht();
-		this.daokithi=new Daokithi();
-		this.uploaddsthi=new Uploaddsthi();
-		this.lstkht=new ArrayList<DsThi>();
-		this.k=new KiHoc();
+		this.daokht = new Daokht();
+		this.daokithi = new Daokithi();
+		this.uploaddsthi = new Uploaddsthi();
+		this.lstkht = new ArrayList<DsThi>();
+		this.k = new KiHoc();
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		response.setContentType("text/html;charset=UTF-8");
 		request.setCharacterEncoding("utf-8");
-		index=Integer.parseInt(request.getParameter("id"));
+		index = Integer.parseInt(request.getParameter("id"));
 		request.setAttribute("idkihoc", index);
 		request.getRequestDispatcher("/views/formUpLoadDiem.jsp").forward(request, response);
 	}
@@ -71,92 +71,118 @@ public class Readlsistmark extends HttpServlet {
 			throws ServletException, IOException {
 		response.setContentType("text/html;charset=UTF-8");
 		request.setCharacterEncoding("utf-8");
+		Part filePart = request.getPart("namefile");
+		String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
+		InputStream fileContent = filePart.getInputStream();
 		String loaimon = request.getParameter("Category");
-		String loaifile=request.getParameter("downloadFile");
-			String file=readurlfile(request, response);
-			if(file==null) {
-				System.out.print("xin mời chọn file ");
-			}else if(!file.contains("xlsx")){
-				System.out.print("file bạn chọn không phải là định dạng file excel ");
-				response.sendRedirect("http://localhost:8080/Toolpdt/Readlsistmark?id="+index);
-			}else {
+		String loaifile = request.getParameter("downloadFile");
+		if (fileName.length() == 0) {
+			int valueSes3 = 3;
+			this.setValueToSes(request, valueSes3);
+			response.sendRedirect("http://localhost:8080/Toolpdt/Readlsistmark?id=" + index);
+			return;
+		} else if (!fileName.contains("xlsx")) {
+			int valueSes4 = 4;
+			this.setValueToSes(request, valueSes4);
+			response.sendRedirect("http://localhost:8080/Toolpdt/Readlsistmark?id=" + index);
+			return;
+		} else {
 			if (loaimon.equalsIgnoreCase("option2")) {
-				if(this.online.kiemTra(file)>0) {
-				this.lstsvcamthi = this.online.xuatsvcamthi();
-				this.lstsvthi = this.online.xuatsvthi();
-				}else {
-					System.out.print("không phải định dạng của danh sách điểm online ");
-					response.sendRedirect("http://localhost:8080/Toolpdt/Readlsistmark?id="+index);
+				try {
+					if (this.online.kiemTra(fileContent) > 0) {
+						this.lstsvcamthi = this.online.xuatsvcamthi();
+						this.lstsvthi = this.online.xuatsvthi();
+					} else {
+						int valueSes5 = 5;
+						this.setValueToSes(request, valueSes5);
+						response.sendRedirect("http://localhost:8080/Toolpdt/Readlsistmark?id=" + index);
+						return;
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+					int valueSes9 = 9;
+					this.setValueToSes(request, valueSes9);
+					response.sendRedirect("http://localhost:8080/Toolpdt/Readlsistmark?id=" + index);
+					return;
 				}
+				
 			} else if (loaimon.equalsIgnoreCase("option3")) {
-				if(this.diemdanh.kiemTra(file)>0) {
-				this.lstsvcamthi = this.diemdanh.xuatsvcamthi();
-				this.lstsvthi = this.diemdanh.xuatsvthi();
-				}else {
-					System.out.print("không phải định dạng của danh sách điểm danh ");
-					response.sendRedirect("http://localhost:8080/Toolpdt/Readlsistmark?id="+index);
+				try {
+					int countdd=this.diemdanh.kiemTra(fileContent) ;
+					if (countdd> 0) {
+						this.lstsvcamthi = this.diemdanh.xuatsvcamthi();
+						this.lstsvthi = this.diemdanh.xuatsvthi();
+					} else {
+						int valueSes6 = 6;
+						this.setValueToSes(request, valueSes6);
+						response.sendRedirect("http://localhost:8080/Toolpdt/Readlsistmark?id=" + index);
+						return;
+					}
+				}catch (Exception e) {
+					e.printStackTrace();
+					int valueSes9 = 9;
+					this.setValueToSes(request, valueSes9);
+					response.sendRedirect("http://localhost:8080/Toolpdt/Readlsistmark?id=" + index);
+					return;
 				}
+				
 			} else {
-				if(this.quiz.kiemTraQuiz(file)>0) {
-				this.lstsvcamthi = this.quiz.getListSinhVienCamThi();
-				this.lstsvthi = this.quiz.getListSinhVienDiThi();
-				}else {
-					System.out.print("không phải định dạng của danh sách điểm Quiz online ");
-					response.sendRedirect("http://localhost:8080/Toolpdt/Readlsistmark?id="+index);
+				try {
+					int count=this.quiz.kiemTraQuiz(fileContent);
+					if ( count> 0) {
+						this.lstsvcamthi = this.quiz.getListSinhVienCamThi();
+						this.lstsvthi = this.quiz.getListSinhVienDiThi();
+					} else {
+						int valueSes7 = 7;
+						this.setValueToSes(request, valueSes7);
+						response.sendRedirect("http://localhost:8080/Toolpdt/Readlsistmark?id=" + index);
+						return;
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+					int valueSes9 = 9;
+					this.setValueToSes(request, valueSes9);
+					response.sendRedirect("http://localhost:8080/Toolpdt/Readlsistmark?id=" + index);
 				}
+				
 			}
-			}
-		this.k=this.daokithi.findid(index);
-		if(this.lstsvthi.size()!=0) {
-        try {
-        	this.lstkht=this.daokht.findkht(this.lstsvthi.get(0).getMamon(), this.lstsvthi.get(0).getLop(), k);
-        	if(this.lstkht.size()==0) {
-        		request.setAttribute("error", "Lớp và Môn học không tồn tại trong kế hoạch thi kì này");
-        		response.sendRedirect("http://localhost:8080/Toolpdt/Readlsistmark?id="+index);
-        		
-        	}else {
-        		if(loaifile.equalsIgnoreCase("fileExcel")) {
-        		uploaddsthi.xuatlichthi(this.lstkht, this.lstsvthi, this.lstsvcamthi,response);
-        		}else {
-        			uploaddsthi.xuatlichthifileword(lstsvthi, response);
-        		}
-        	
-			
-        	}
-		  } catch (Exception e) {
-				e.printStackTrace();
-		  }
-		}else {
-			System.out.print("file không hợp lệ2");
 		}
-        	this.lstsvcamthi.removeAll(lstsvcamthi);
-        	this.lstsvthi.removeAll(lstsvthi);
-        	this.lstkht.removeAll(lstkht);
-    }
-		
-	private String readurlfile(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		String filename = null;
-		try {
-			Part part = request.getPart("namefile");
-			String realpath = request.getServletContext().getRealPath("/filemarks");
-			String namefile = Path.of(part.getSubmittedFileName()).getFileName().toString();
-			if (!Files.exists(Path.of(realpath))) {
-				Files.createDirectory(Path.of(realpath));
-			}
-			if(namefile.length()==0) {
-				System.out.print("xin mời chọn file3 ");
-				response.sendRedirect("http://localhost:8080/Toolpdt/Readlsistmark?id="+index);
-			}else {
-			part.write(realpath + System.getProperty("file.separator") + namefile);
-			filename = realpath + System.getProperty("file.separator") + namefile;
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.out.print("xin mời chọn file1 ");
-			response.sendRedirect("http://localhost:8080/Toolpdt/Readlsistmark?id="+index);
-		}
-		return filename;
-	}
+		this.k = this.daokithi.findid(index);
+		if (this.lstsvthi.size() != 0) {
+			try {
+				this.lstkht = this.daokht.findkht(this.lstsvthi.get(0).getMamon(), this.lstsvthi.get(0).getLop(), k);
+				if (this.lstkht.size() == 0) {
+					int valueSes8 = 8;
+					this.setValueToSes(request, valueSes8);
+					response.sendRedirect("http://localhost:8080/Toolpdt/Readlsistmark?id=" + index);
+					return;
 
+				} else {
+					if (loaifile.equalsIgnoreCase("fileExcel")) {
+						uploaddsthi.xuatlichthi(this.lstkht, this.lstsvthi, this.lstsvcamthi, response);
+					} else {
+						uploaddsthi.xuatlichthifileword(lstsvthi, response);
+					}
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				int valueSes9 = 9;
+				this.setValueToSes(request, valueSes9);
+				return;
+			}
+		} else {
+			int valueSes9 = 9;
+			this.setValueToSes(request, valueSes9);
+			return;
+		}
+		this.lstsvcamthi.removeAll(lstsvcamthi);
+		this.lstsvthi.removeAll(lstsvthi);
+		this.lstkht.removeAll(lstkht);
+	}
+	
+	private void setValueToSes(HttpServletRequest request, int value) {
+		HttpSession session = request.getSession();
+		session.setAttribute("value", value);
+	}
 
 }

@@ -13,7 +13,7 @@ import javax.servlet.http.HttpSession;
 
 import Dao.UserServies;
 import Model.GooglePojo;
-import Model.User;
+import Model.Manageruser;
 import Services.GoogleUtils;
 
 @MultipartConfig()
@@ -28,7 +28,6 @@ public class LoginGoogle extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		System.out.println("chay dc1");
 		String code = request.getParameter("code");
 		if (code == null || code.isEmpty()) {
 			RequestDispatcher dis = request.getRequestDispatcher("/views/loginForm.jsp");
@@ -37,16 +36,13 @@ public class LoginGoogle extends HttpServlet {
 		}
 		String token = GoogleUtils.getToken(code);
 		GooglePojo googlePojo = GoogleUtils.getUserInfo(token);
-
 		String email = googlePojo.getEmail();
-		User us = userLogin.findByEmail(email);
+		Manageruser us = userLogin.findByEmail(email);
 		if (us != null) {
-			System.out.println("chay dc");
 			HttpSession session = request.getSession();
-			session.setAttribute("user", us);
-			response.sendRedirect("http://localhost:8080/Toolpdt/HomeForm.jsp");
+			session.setAttribute("user1", us);
+			response.sendRedirect("http://localhost:8080/Toolpdt/Home");
 		} else {
-			System.out.println("chay ko dc");
 			RequestDispatcher dis = request.getRequestDispatcher("/views/loginForm.jsp");
 			dis.forward(request, response);
 		}
@@ -56,10 +52,4 @@ public class LoginGoogle extends HttpServlet {
 			throws ServletException, IOException {
 
 	}
-
-	private boolean Login(String gmail) {
-		User us = this.userLogin.findByEmail(gmail);
-		return us != null;
-	}
-
 }

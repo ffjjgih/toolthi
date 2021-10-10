@@ -38,9 +38,6 @@ public class Home extends HttpServlet {
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		response.setContentType("text/html;charset=UTF-8");
-		request.setCharacterEncoding("utf-8");
 		try {
 			updatekihoc(request, response);
 		} catch (ParseException e) {
@@ -61,10 +58,12 @@ public class Home extends HttpServlet {
 			response.sendRedirect("http://localhost:8080/Toolpdt/Uploadkht?id="+k1.getIdhk());
 		}else if(url.contains("logout")) {
 			HttpSession session = request.getSession();
-
-			session.setAttribute("user", null);
+			session.setAttribute("user1", null);
 			response.sendRedirect("http://localhost:8080/Toolpdt/login-google");
+			return;
 		}
+		response.setContentType("text/html;charset=UTF-8");
+		request.setCharacterEncoding("utf-8");
 		
 		
 	}

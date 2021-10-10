@@ -1,7 +1,7 @@
 package Services;
 
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -63,7 +63,7 @@ public class Readfilediemdanh {
 		return listSVDiemDanhFile;
 	}
 
-	public Integer kiemTra(String nameFile) throws IOException {
+	public Integer kiemTra(InputStream nameFile) throws IOException {
 		List<Integer> listColumn = new ArrayList<>();
 		XSSFSheet sheet = this.createSheet(nameFile);
 		Iterator<Row> iterator = this.createIterator(sheet);
@@ -91,9 +91,8 @@ public class Readfilediemdanh {
 		return listColumn.size();
 	}
 
-	private XSSFSheet createSheet(String nameFile) throws IOException {
-		FileInputStream fis = new FileInputStream(nameFile);
-		XSSFWorkbook workbook = new XSSFWorkbook(fis);
+	private XSSFSheet createSheet(InputStream nameFile) throws IOException {
+		XSSFWorkbook workbook = new XSSFWorkbook(nameFile);
 		XSSFSheet sheet = workbook.getSheetAt(0);
 		return sheet;
 	}

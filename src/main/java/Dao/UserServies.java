@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
+import Model.Manageruser;
 import Model.User;
 import utils.JpaUtils;
 
@@ -15,12 +16,12 @@ public class UserServies {
 		this.em = JpaUtils.getEntityManager();
 	}
 
-	public User findByEmail(String Gmail) {
-		String hql = "Select u FROM Users u WHERE u.gmail = :gmail";
-		TypedQuery<User> query = em.createQuery(hql, User.class);
-		query.setParameter("gmail", Gmail);
-		List<User> listUser = query.getResultList();
-		for (User us : listUser) {
+	public Manageruser findByEmail(String Gmail) {
+		String hql = "Select u FROM Manageruser u WHERE u.gmail = :g_mail";
+		TypedQuery<Manageruser> query = em.createQuery(hql, Manageruser.class);
+		query.setParameter("g_mail", Gmail);
+		List<Manageruser> listUser = query.getResultList();
+		for (Manageruser us : listUser) {
 			return us;
 		}
 		return null;

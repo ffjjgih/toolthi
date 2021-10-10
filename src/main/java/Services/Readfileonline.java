@@ -1,36 +1,38 @@
 package Services;
 
-import java.io.FileInputStream;
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import Model.SinhVien;
 
 public class Readfileonline {
-	private ArrayList<SinhVien> listSinhVien ;
-	private ArrayList<SinhVien> listSVThi ;
-	private ArrayList<SinhVien> ListSVcamthi ;
+	private ArrayList<SinhVien> listSinhVien;
+	private ArrayList<SinhVien> listSVThi;
+	private ArrayList<SinhVien> ListSVcamthi;
 	private SinhVien sv;
 	private String lop, mamon;
 	private Cell cell;
 
 	public Readfileonline() {
-		this.listSinhVien= new ArrayList<>();
-		this.listSVThi= new ArrayList<>();
-		this.ListSVcamthi= new ArrayList<>();
-		this.sv=new SinhVien();
+		this.listSinhVien = new ArrayList<>();
+		this.listSVThi = new ArrayList<>();
+		this.ListSVcamthi = new ArrayList<>();
+		this.sv = new SinhVien();
 	}
-	
-	public Integer kiemTra(String fileName) throws IOException {
+
+	public Integer kiemTra(InputStream fileName) throws IOException {
 		List<Integer> listColumn = new ArrayList<>();
-		XSSFSheet sheet = this.createSheet(fileName);
+		Sheet sheet = this.createSheet(fileName);
 		Iterator<Row> iterator = this.createIterator(sheet);
 		sheet.getRow(6).forEach(cellHeader -> {
 			if (cellHeader.getStringCellValue().equalsIgnoreCase("Bài Học Online")) {
@@ -50,7 +52,7 @@ public class Readfileonline {
 					}
 				});
 				sheet.getRow(6).forEach(cellstatus -> {
-					if ( cellstatus.getStringCellValue().equalsIgnoreCase("Trạng Thái")) {
+					if (cellstatus.getStringCellValue().equalsIgnoreCase("Trạng Thái")) {
 						listColumn.add(cellstatus.getColumnIndex());
 					}
 				});
@@ -74,11 +76,11 @@ public class Readfileonline {
 				Iterator<Cell> iteratorCell = row.cellIterator();
 				if (row.getRowNum() == 2) {
 					this.lop = row.getCell(3).getStringCellValue();
-					lop= lop.replaceAll(" ", "");
+					lop = lop.replaceAll(" ", "");
 				}
 				if (row.getRowNum() == 3) {
 					this.mamon = row.getCell(3).getStringCellValue();
-					mamon= mamon.replaceAll(" ", "");
+					mamon = mamon.replaceAll(" ", "");
 				}
 				if (row.getRowNum() > 7) {
 					while (iteratorCell.hasNext()) {
@@ -90,7 +92,7 @@ public class Readfileonline {
 							this.sv.setNameSV(row.getCell(listCell.get(1)).getStringCellValue());
 						}
 						if (cell.getColumnIndex() == listCell.get(2)) {
-							this.sv.setMark((double)row.getCell(listCell.get(2)).getNumericCellValue());
+							this.sv.setMark((double) row.getCell(listCell.get(2)).getNumericCellValue());
 						}
 						if (cell.getColumnIndex() == listCell.get(3)) {
 							this.sv.setStatus(row.getCell(listCell.get(3)).getStringCellValue());
@@ -110,32 +112,32 @@ public class Readfileonline {
 	public void checkDiemOnl(ArrayList<SinhVien> list) {
 		for (int i = 0; i < list.size(); i++) {
 			if (list.get(i).getMark() > 7.5 && !list.get(i).getStatus().equalsIgnoreCase("Attendance failed")) {
-				this.listSVThi.add(new SinhVien(list.get(i).getIdSV(), list.get(i).getNameSV(),list.get(i).getStatus(),
-						list.get(i).getMark(),list.get(i).getMamon(),list.get(i).getLop()));
+				this.listSVThi.add(new SinhVien(list.get(i).getIdSV(), list.get(i).getNameSV(), list.get(i).getStatus(),
+						list.get(i).getMark(), list.get(i).getMamon(), list.get(i).getLop()));
 			} else {
-				this.ListSVcamthi.add(new SinhVien(list.get(i).getIdSV(), list.get(i).getNameSV(),list.get(i).getStatus(),
-						list.get(i).getMark(),list.get(i).getMamon(),list.get(i).getLop()));
+				this.ListSVcamthi.add(new SinhVien(list.get(i).getIdSV(), list.get(i).getNameSV(),
+						list.get(i).getStatus(), list.get(i).getMark(), list.get(i).getMamon(), list.get(i).getLop()));
 			}
 		}
 	}
 
-	private XSSFSheet createSheet(String nameFile) throws IOException {
-		FileInputStream fis = new FileInputStream(nameFile);
-		XSSFWorkbook workbook = new XSSFWorkbook(fis);
-		XSSFSheet sheet = workbook.getSheetAt(0);
+	private Sheet createSheet(InputStream nameFile) throws IOException {
+		File f = new File("Summer2021-COM108(1).xlsx");
+		Workbook workbook = new XSSFWorkbook(nameFile);
+		Sheet sheet = workbook.getSheetAt(0);
 		return sheet;
 	}
 
-	private Iterator createIterator(XSSFSheet sheet) {
+	private Iterator createIterator(Sheet sheet) {
 		Iterator<Row> iterator = sheet.iterator();
 		return iterator;
 	}
-	
-	public ArrayList<SinhVien> xuatsvthi(){
+
+	public ArrayList<SinhVien> xuatsvthi() {
 		return this.listSVThi;
 	}
-	
-	public ArrayList<SinhVien> xuatsvcamthi(){
+
+	public ArrayList<SinhVien> xuatsvcamthi() {
 		return this.ListSVcamthi;
 	}
 }

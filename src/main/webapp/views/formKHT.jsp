@@ -90,7 +90,7 @@
                                 <td>${item.lop }</td>
                                 <td>
                                     <a type = "submit" href="updatekht?index=${item.id}&&id=${idkihoc}" class="button_update">SỬA</a>
-                                    <a type = "submit" href="deletekht?khtID=${item.id}" class="button_del">XÓA</a>
+                                    <a type = "submit" href="deletekht?index=${item.id}&&id=${idkihoc}" class="button_del">XÓA</a>
                                 </td>
                             </tr>
                             </c:forEach>

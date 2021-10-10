@@ -33,6 +33,25 @@
                     <h1 class="h1 container_header">
                         UPLOAD FILE KẾ HOẠCH THI
                     </h1>
+                     <%
+                     try{
+                    	int data = Integer.parseInt(session.getAttribute("value").toString());
+                    	if((data == 3)){
+                    		out.print("<div class=\"container_alert\">\r\n"
+                    				+ "                        <div class=\"alert alert-danger container_alert-popup\" role=\"alert\">\r\n"
+                    				+ "                            Opps, Chúng tôi chưa lấy được file của bạn rồi, Hãy thử lại!\r\n"
+                    				+ "                          </div>\r\n"
+                    				+ "                    </div>");
+                    	} else if (data == 4){
+                    		out.print("<div class=\"container_alert\">\r\n"
+                    				+ "                        <div class=\"alert alert-danger container_alert-popup\" role=\"alert\">\r\n"
+                    				+ "                            Opps, Đây không phải định dạng file Kế hoạch thi rồi, Hãy thử lại!\r\n"
+                    				+ "                          </div>\r\n"
+                    				+ "                    </div>");
+                    	}
+                     }catch(Exception e){
+                     }
+                    %>
                     <form action="/Toolpdt/Uploadkht" enctype="multipart/form-data" method="post" >
                         <div class="container_body">
                             <div class="container_body-button">
@@ -42,7 +61,7 @@
                                
                             </div> 
                             <div class="container_body-submit">
-                                <button formaction="/Toolpdt/Uploadkht?id=${id}" class="btn_submit">SUBMIT</button>
+                                <button class="btn_submit" onclick = "GFG_Fun()">SUBMIT</button>
                             </div>
                         </div>
                     </form>
@@ -63,11 +82,31 @@
 
         </div>
     </div>
-    </div>
 
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script>
+		function fileValidation() {
+			var fileInput = document.getElementById('UploadFileInput');
+			var filePath = fileInput.value;
+			var allowedExtendsion = /(\.xls|\.xlsx)$/i;
+			// kiểm tra định dạng
+			if (!allowedExtendsion.exec(filePath)) {
+				alert('Vui lòng chỉ upload file Excel!');
+				fileInput.value = '';
+				return false;
+			}
+		}
+		
+		var file = document.getElementById("namfile");
+        function GFG_Fun() {
+            if(file.files.length == 0 ){
+                alert('Bạn chưa upload file!');
+            } else {
+            }
+        }
+	</script>
 </body>
 
 </html>

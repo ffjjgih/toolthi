@@ -4,6 +4,7 @@
 		<class>Model.DsThi</class>
 		<class>Model.KiHoc</class>
 		<class>Model.User</class>
+		<class>Model.Manageruser</class>
 		<properties>
 			<property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/Toolpdt"/>
 			<property name="javax.persistence.jdbc.user" value="root"/>
