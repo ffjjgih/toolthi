@@ -14,10 +14,11 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import Model.Manageruser;
 import Model.User;
 
 
-@WebFilter(dispatcherTypes = { DispatcherType.REQUEST }, urlPatterns = { "/Login-out" })
+@WebFilter(dispatcherTypes = { DispatcherType.REQUEST }, urlPatterns = { "/Home/*" })
 public class Login implements Filter {
 
 	public Login() {
@@ -29,16 +30,16 @@ public class Login implements Filter {
 
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
-
 		HttpServletRequest servletRequest = (HttpServletRequest) request;
 		HttpServletResponse servletResponse = (HttpServletResponse) response;
-		User authUser = (User) servletRequest.getSession().getAttribute("user");
+		Manageruser authUser = (Manageruser) servletRequest.getSession().getAttribute("user1");
 		if (authUser == null) {
+			System.out.print("accc");
 			((HttpServletResponse) response).sendRedirect("http://localhost:8080/Toolpdt/login-google");
 		} else {
+			System.out.print(authUser.getGmail());
 			chain.doFilter(servletRequest, response);
 		}
-
 	}
 
 	public void init(FilterConfig fConfig) throws ServletException {

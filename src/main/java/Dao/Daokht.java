@@ -38,22 +38,6 @@ public class Daokht extends Dao<DsThi> {
 		this.lstkht = query.getResultList();
 		return this.lstkht;
 	}
-
-	/*
-	 * public void deleteKHT(int idKHT) throws Exception {
-	 * 
-	 * this.entity = this.jpa.getEntityManager(); this.trans =
-	 * this.entity.getTransaction(); try { trans.begin();
-	 * 
-	 * DsThi kht = this.entity.find(DsThi.class, idKHT);
-	 * 
-	 * if (kht != null) { this.entity.remove(kht); } else { throw new
-	 * Exception("Not find Kế hoạch thi, please try again!"); }
-	 * 
-	 * this.trans.commit(); } catch (Exception e) { // TODO: handle exception
-	 * e.printStackTrace(); this.trans.rollback(); throw e; } finally {
-	 * this.entity.close(); } }
-	 */
 	
 	public List<DsThi> findKHTByClass(String idClass){
 		this.lstkht = new ArrayList<DsThi>();

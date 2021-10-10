@@ -1,7 +1,5 @@
 package Services;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,24 +27,23 @@ public class Uploaddsthi {
 	private ArrayList<SinhVien> lstsvthi;
 	private ArrayList<SinhVien> lstsvcamthi;
 	private List<DsThi> lst;
-	private List<DsThi> lstcathi;
 
 	public Uploaddsthi() {
 		this.lstsvthi = new ArrayList<SinhVien>();
 		this.lstsvcamthi = new ArrayList<SinhVien>();
-		this.lstcathi = new ArrayList<DsThi>();
 		this.lst = new ArrayList<DsThi>();
 	}
 
-	public void xuatlichthi(List<DsThi> lstkht, ArrayList<SinhVien> svthi, ArrayList<SinhVien> svcthi, HttpServletResponse response) throws Exception {
+	public void xuatlichthi(List<DsThi> lstkht, ArrayList<SinhVien> svthi, ArrayList<SinhVien> svcthi,
+			HttpServletResponse response) throws Exception {
 		int countcathi = socathi();
 		this.lst = lstkht;
 		this.lstsvthi = svthi;
 		this.lstsvcamthi = svcthi;
 		int ca1 = cathi1(lstsvthi), ca2 = cathi2(lstsvthi), ca3 = cathi3(lstsvthi);
-		String fileName = "dsthi-"+this.lstsvthi.get(0).getMamon()+"-"+this.lstsvthi.get(0).getLop()+".xlsx";
-    	response.setContentType("application/octet-stream");
-    	response.setHeader("Content-Disposition", "attachment; filename=" + fileName); 
+		String fileName = "dsthi-" + this.lstsvthi.get(0).getMamon() + "-" + this.lstsvthi.get(0).getLop() + ".xlsx";
+		response.setContentType("application/octet-stream");
+		response.setHeader("Content-Disposition", "attachment; filename=" + fileName);
 		ServletOutputStream pos = response.getOutputStream();
 		XSSFWorkbook xssfw = new XSSFWorkbook();
 		XSSFRow row, row1, row2, row3, row4, row5, row6;
@@ -196,7 +193,7 @@ public class Uploaddsthi {
 					cellD.setCellValue(this.lstsvcamthi.get(i).getNameSV());
 					cellE = row.createCell((short) 3);
 					cellE.setCellValue(this.lst.get(0).getLop().replaceAll("\\s+", ""));
-					cellG = row.createCell((short)5);
+					cellG = row.createCell((short) 5);
 					cellG.setCellValue(this.lstsvcamthi.get(i).getMark());
 					cellF = row.createCell((short) 6);
 					cellF.setCellValue(this.lstsvcamthi.get(i).getStatus());
@@ -209,14 +206,14 @@ public class Uploaddsthi {
 	}
 
 	public void xuatlichthifileword(ArrayList<SinhVien> svthi, HttpServletResponse response) throws Exception {
-		
+
 		lstsvthi = svthi;
-		String fileName = "dsthi-"+this.lstsvthi.get(0).getMamon()+"-"+this.lstsvthi.get(0).getLop()+".docx";
-    	response.setContentType("application/octet-stream");
-    	response.setHeader("Content-Disposition", "attachment; filename=" + fileName); 
+		String fileName = "dsthi-" + this.lstsvthi.get(0).getMamon() + "-" + this.lstsvthi.get(0).getLop() + ".docx";
+		response.setContentType("application/octet-stream");
+		response.setHeader("Content-Disposition", "attachment; filename=" + fileName);
 		ServletOutputStream pos = response.getOutputStream();
 		XWPFDocument xwpfd = new XWPFDocument();
-		XWPFTable table1,table2,table3;
+		XWPFTable table1, table2, table3;
 		int ca1 = cathi1(lstsvthi);
 		int ca2 = cathi2(lstsvthi);
 		int ca3 = cathi3(lstsvthi);
@@ -232,7 +229,7 @@ public class Uploaddsthi {
 			titleRun.setFontSize(14);
 
 			if (j == 0) {
-				table1 = xwpfd.createTable(ca1+1, 9);
+				table1 = xwpfd.createTable(ca1 + 1, 9);
 				table1.getRow(0).setHeight(700);
 				table1.getRow(0).getCell(0).setWidth("500");
 				table1.getRow(0).getCell(1).setWidth("1500");
@@ -261,6 +258,7 @@ public class Uploaddsthi {
 				table1.getRow(0).getCell(6).setText("Điểm bảo vệ");
 				table1.getRow(0).getCell(7).setText("SV ký nhận");
 				table1.getRow(0).getCell(8).setText("Nhận xét");
+				System.out.println(ca1+1);
 				for (int i = 1; i <= ca1; i++) {
 					table1.getRow(i).setHeight(1300);
 					table1.getRow(i).getCell(0).setWidth("500");
@@ -286,7 +284,7 @@ public class Uploaddsthi {
 					table1.getRow(i).getCell(8).setText("");
 				}
 			} else if (j == 1) {
-				table2 = xwpfd.createTable(ca2+1, 9);
+				table2 = xwpfd.createTable(ca2 + 1, 9);
 				table2.getRow(0).setHeight(700);
 				table2.getRow(0).getCell(0).setWidth("500");
 				table2.getRow(0).getCell(1).setWidth("1500");
@@ -340,7 +338,7 @@ public class Uploaddsthi {
 					table2.getRow(i).getCell(8).setText("");
 				}
 			} else {
-				table3 = xwpfd.createTable(ca3+1, 9);
+				table3 = xwpfd.createTable(ca3 + 1, 9);
 				table3.getRow(0).setHeight(700);
 				table3.getRow(0).getCell(0).setWidth("500");
 				table3.getRow(0).getCell(1).setWidth("1500");
@@ -370,7 +368,7 @@ public class Uploaddsthi {
 				table3.getRow(0).getCell(7).setText("SV ký nhận");
 				table3.getRow(0).getCell(8).setText("Nhận xét");
 				for (int i = 1; i <= ca3; i++) {
-					table3.getRow(i-1).setHeight(1300);
+					table3.getRow(i - 1).setHeight(1300);
 					table3.getRow(i).getCell(0).setWidth("500");
 					table3.getRow(i).getCell(1).setWidth("1500");
 					table3.getRow(i).getCell(2).setWidth("2500");

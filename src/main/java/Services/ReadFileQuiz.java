@@ -1,7 +1,7 @@
 package Services;
 
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -26,7 +26,7 @@ public class ReadFileQuiz {
 		this.listSVCamThi = new ArrayList<>();
 	}
 
-	public Integer kiemTraQuiz(String fileName) throws IOException {
+	public Integer kiemTraQuiz(InputStream fileName) throws IOException {
 		ArrayList<Integer> listColumn = new ArrayList<Integer>();
 		XSSFSheet sheet = this.createSheet(fileName);
 		Iterator<Row> iteratorRow = this.createIterator(sheet);
@@ -59,7 +59,6 @@ public class ReadFileQuiz {
 					this.listSinhVien = this.readDiemQuiz(iteratorRow, listColumn);
 					this.checkDieuKien(listSinhVien);
 				} catch (Exception e) {
-					// TODO: handle exception
 					e.printStackTrace();
 				}
 			}
@@ -134,27 +133,24 @@ public class ReadFileQuiz {
 		}
 		return lstSV;
 	}
-	
+
 	private void checkDieuKien(ArrayList<SinhVien> listCheck) {
 		for (int i = 0; i < listCheck.size(); i++) {
-			if (listCheck.get(i).getMark() < 100 && listCheck.get(i).getStatus().equalsIgnoreCase("Attendance failed")) {
-				this.listSVCamThi.add(
-						new SinhVien(listCheck.get(i).getIdSV(), 
-								listCheck.get(i).getNameSV(), 
-								listCheck.get(i).getStatus(), 
-								listCheck.get(i).getMark(),listCheck.get(i).getMamon(),listCheck.get(i).getLop()));
+			if (listCheck.get(i).getMark() < 100
+					&& listCheck.get(i).getStatus().equalsIgnoreCase("Attendance failed")) {
+				this.listSVCamThi.add(new SinhVien(listCheck.get(i).getIdSV(), listCheck.get(i).getNameSV(),
+						listCheck.get(i).getStatus(), listCheck.get(i).getMark(), listCheck.get(i).getMamon(),
+						listCheck.get(i).getLop()));
 			} else {
-				this.listSVThi.add(new SinhVien(listCheck.get(i).getIdSV(), 
-						listCheck.get(i).getNameSV(), 
-						listCheck.get(i).getStatus(), 
-						listCheck.get(i).getMark(),listCheck.get(i).getMamon(),listCheck.get(i).getLop()));
+				this.listSVThi.add(new SinhVien(listCheck.get(i).getIdSV(), listCheck.get(i).getNameSV(),
+						listCheck.get(i).getStatus(), listCheck.get(i).getMark(), listCheck.get(i).getMamon(),
+						listCheck.get(i).getLop()));
 			}
 		}
 	}
 
-	private XSSFSheet createSheet(String nameFile) throws IOException {
-		FileInputStream fis = new FileInputStream(nameFile);
-		XSSFWorkbook workbook = new XSSFWorkbook(fis);
+	private XSSFSheet createSheet(InputStream nameFile) throws IOException {
+		XSSFWorkbook workbook = new XSSFWorkbook(nameFile);
 		XSSFSheet sheet = workbook.getSheetAt(0);
 		return sheet;
 	}
@@ -163,12 +159,12 @@ public class ReadFileQuiz {
 		Iterator<Row> iterator = sheet.iterator();
 		return iterator;
 	}
-	
-	public ArrayList<SinhVien> getListSinhVienCamThi(){
+
+	public ArrayList<SinhVien> getListSinhVienCamThi() {
 		return this.listSVCamThi;
 	}
-	
-	public ArrayList<SinhVien> getListSinhVienDiThi(){
+
+	public ArrayList<SinhVien> getListSinhVienDiThi() {
 		return this.listSVThi;
 	}
 }

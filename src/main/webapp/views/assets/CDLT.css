@@ -120,3 +120,14 @@
     height: 60px;
     float: right;
 }
+
+.container_alert{
+    float: left;
+    margin-left: -360px;
+    font-size: 14px !important;
+}
+
+.container_alert-popup{
+    width: auto !important;
+    height: auto !important;
+}
